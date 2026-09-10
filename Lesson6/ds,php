@@ -1,0 +1,12 @@
+<?php
+
+function krijoFile($emri, $teksti)
+{
+    $file = fopen($emri, "w");
+    fwrite($file, $teksti);
+    fclose($file);
+}
+
+krijoFile("test.txt", "Ky tekst u shkrua permes funksionit!");
+
+?>
