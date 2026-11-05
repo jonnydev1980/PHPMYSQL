@@ -1,0 +1,10 @@
+<?php
+require_once __DIR__ . '/includes/bootstrap.php';
+require_login();
+$id=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
+$s=$conn->prepare('SELECT * FROM movies WHERE id=:id');$s->execute(['id'=>$id]);$movie=$s->fetch();
+if(!$movie){http_response_code(404);flash('warning','Filmi nuk u gjet.');header('Location: home.php');exit;}
+page_start('Detajet e filmit','home.php');
+?>
+<div class="panel"><div class="row g-4 align-items-center"><div class="col-lg-5"><img class="detail-poster" src="movie_images/<?= rawurlencode(basename($movie['movie_image'])) ?>" alt="<?= e($movie['movie_name']) ?>" onerror="this.src='assets/no-poster.svg'"></div><div class="col-lg-7"><span class="badge text-bg-light mb-2"><?= e($movie['movie_quality']) ?></span><h2 class="display-6 fw-bold"><?= e($movie['movie_name']) ?></h2><p class="text-secondary">Vlerësimi: <?= (int)$movie['movie_rating'] ?>/10</p><p class="lh-lg"><?= e($movie['movie_desc']) ?></p><hr><h3 class="section-title">Rezervo biletat</h3><form action="book.php" method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="movie_id" value="<?= (int)$movie['id'] ?>"><div class="row g-3"><div class="col-md-4"><label class="form-label">Numri i biletave</label><input class="form-control" type="number" name="nr_tickets" min="1" max="10" value="1" required></div><div class="col-md-4"><label class="form-label">Data</label><input class="form-control" type="date" name="date" min="<?= date('Y-m-d') ?>" required></div><div class="col-md-4"><label class="form-label">Ora</label><select class="form-select" name="time" required><option value="12:00">12:00</option><option value="15:00">15:00</option><option value="17:00">17:00</option><option value="19:00">19:00</option></select></div><div class="col-12"><button class="btn btn-primary px-4">Dërgo rezervimin</button><a class="btn btn-outline-secondary ms-2" href="home.php">Kthehu te filmat</a></div></div></form></div></div></div>
+<?php page_end(); ?>

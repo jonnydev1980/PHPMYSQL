@@ -1,0 +1,11 @@
+HAPAT E INSTALIMIT
+
+1. Nxirre folderin Movies_Managment_System ne C:\xampp\htdocs\.
+2. Starto Apache dhe MySQL nga XAMPP Control Panel.
+3. Ne phpMyAdmin kontrollo databazen mms. Nese nuk ekziston, krijoje dhe importo database/mms.sql.
+4. Nese ke databaze ekzistuese me te dhena te rendesishme, mos e mbishkruaj. Bej export/backup para cdo ndryshimi.
+5. Hape http://localhost/Movies_Managment_System/login.php.
+6. Per llogari te re perdor faqen Regjistrohu. Llogaria e re krijohet si klient.
+7. Per testet administrative perdor nje llogari ekzistuese qe ne databaze ka is_admin = true.
+
+Shenim: Projekti nuk permban kredenciale te reja administratori. Mos e ndrysho rolin e perdoruesit pa lejen e pronarit te databazes.

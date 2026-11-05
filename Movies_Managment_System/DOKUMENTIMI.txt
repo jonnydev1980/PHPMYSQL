@@ -1,0 +1,103 @@
+MOVIES MANAGEMENT SYSTEM
+
+Databaza mms.
+
+Struktura e projektit
+
+config.php perdoret per lidhjen me databazen.
+
+includes/bootstrap.php pergatit sesionin dhe kontrollet qe perdoren ne faqe.
+
+assets/style.css permban dizajnin e faqes.
+
+login.php dhe loginLogic.php përdoren për hyrjen në sistem.
+
+index.php dhe register.php perdoren per regjistrimin e perdoruesve.
+
+home.php paraqet filmat dhe mundeson kërkimin e tyre.
+
+details.php shfaq te dhenat per nje film.
+
+book.php perdoret per rezervimin e biletave.
+
+bookings.php shfaq rezervimet.
+
+booking_action.php perdoret per aprovimin ose refuzimin e rezervimeve.
+
+dashboard.php paraqet te dhenat kryesore per administratorin.
+
+list_movies.php dhe addMovie.php perdoren per shtimin dhe menaxhimin e filmave.
+
+database/mms.sql permban strukturen dhe te dhenat fillestare te databazes.
+
+Gjate kontrollimit të projektit kemi kaluar nëpër faqet kryesore dhe kemi bërë disa rregullime që sistemi të funksionojë më mirë.
+
+Është rregulluar lidhja e PHP me databazën duke përdorur PDO.
+
+Është kontrolluar procesi i hyrjes dhe është përmirësuar mënyra e ruajtjes së sesionit të përdoruesit.
+
+Janë vendosur kontrolle për faqet ku duhet të jetë i kyçur përdoruesi. Gjithashtu janë ndarë veprimet që mund t'i kryejë klienti nga ato që lejohen vetëm për administratorin.
+
+Është rregulluar dalja nga llogaria.
+
+Te regjistrimi kontrollohen fushat e formularit, adresa e emailit dhe nëse fjalëkalimi përputhet me konfirmimin.
+
+Fjalëkalimet ruhen në formë të hash-uar dhe kontrollohen gjatë hyrjes në sistem.
+
+Te formularët që ndryshojnë të dhënat janë shtuar kontrolle për kërkesat e dërguara.
+
+Gjatë rezervimit kontrollohen filmi i zgjedhur, numri i biletave, data dhe ora.
+
+Rezervimet e reja ruhen në pritje. Administratori mund t'i kontrollojë dhe pastaj t'i aprovojë ose refuzojë.
+
+Është përmirësuar ngarkimi i posterave të filmave dhe kontrolli i formatit dhe madhësisë së fotografisë.
+
+Është shtuar kërkimi i filmave dhe janë përmirësuar paraqitjet kur nuk gjenden rezultate.
+
+Në panelin e administratorit paraqiten të dhëna për filmat, përdoruesit dhe rezervimet.
+
+Është punuar edhe në pamjen e faqeve, në mënyrë që formularët dhe tabelat të jenë më të qarta dhe faqja të përshtatet me ekrane të madhësive të ndryshme.
+
+Në rastet kur mungon posteri i një filmi, faqja vazhdon të hapet dhe nuk ndërpritet për shkak të fotografisë.
+
+4. Databaza
+
+Databaza e projektit quhet mms dhe përmban tri tabela kryesore.
+
+Tabela users ruan të dhënat e përdoruesve dhe rolet e tyre.
+
+Tabela movies ruan emrin e filmit, përshkrimin, cilësinë, vlerësimin dhe posterin.
+
+Tabela bookings ruan rezervimet dhe të dhënat për përdoruesin, filmin, numrin e biletave, datën, orën dhe statusin e rezervimit.
+
+5. Hapja e projektit në XAMPP
+
+Për ta hapur projektin në kompjuter, folderi Movies_Managment_System vendoset në C:\xampp\htdocs.
+
+Pastaj hapet XAMPP dhe aktivizohen Apache dhe MySQL.
+
+Në shfletues hapet phpMyAdmin dhe kontrollohet databaza mms. Nëse databaza ka të dhëna ekzistuese, para importimit duhet të ruhet një kopje rezervë.
+
+Në skedarin config.php kontrollohen të dhënat për lidhjen me databazën.
+
+Pasi të jenë aktivizuar shërbimet, projekti hapet përmes localhost.
+
+6. Kontrollimi i funksioneve
+
+Për të kontrolluar nëse projekti punon si duhet, duhet të provohet hyrja me një llogari ekzistuese dhe regjistrimi i një përdoruesi të ri.
+
+Me llogarinë e klientit kontrollohen lista e filmave, detajet e tyre dhe rezervimi i biletave.
+
+Me llogarinë e administratorit kontrollohen paneli, menaxhimi i filmave dhe lista e rezervimeve.
+
+Duhet të provohet edhe aprovimi dhe refuzimi i rezervimeve, si dhe ngarkimi i posterave në format JPG ose PNG.
+
+Në fund kontrollohet edhe pamja e projektit në një dritare më të vogël.
+
+7. Përfundim
+
+Gjatë punës në Movies Management System kemi organizuar pjesët kryesore të projektit dhe kemi përmirësuar funksionet për hyrje, regjistrim, menaxhim të filmave dhe rezervim të biletave.
+
+Sistemi u mundëson klientëve të shikojnë filmat dhe të bëjnë rezervime, ndërsa administratori mund të menaxhojë filmat dhe të kontrollojë rezervimet.
+
+Para dorëzimit, funksionet duhet të provohen në kompjuterin ku do të prezantohet projekti.
