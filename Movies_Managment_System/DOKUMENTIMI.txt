@@ -1,103 +1,51 @@
-MOVIES MANAGEMENT SYSTEM
+DOKUMENTIMI I NDRYSHIMEVE NE MOVIES MANAGEMENT SYSTEM
 
-Databaza mms.
+Ne versionin final kam bere ndryshime ne pamjen e faqes dhe ne funksionimin e sistemit ne menyre qe projekti te jete me modern me i organizuar dhe me i lehte per perdorim
 
-Struktura e projektit
+1. Kam ndryshuar pamjen e Home Page dhe kam vendosur nje dizajn me modern me titull pershkrim dhe forme per kerkimin e filmave
 
-config.php perdoret per lidhjen me databazen.
+2. Kam ndryshuar backgroundin dhe ngjyrat e faqes duke perdorur ngjyra te erreta dhe ngjyre roze te kuqe per butonat dhe elementet kryesore
 
-includes/bootstrap.php pergatit sesionin dhe kontrollet qe perdoren ne faqe.
+3. Kam krijuar nje stil te perbashket per faqet e website permes file assets/style.css qe faqet te kene pamje te njejte dhe profesionale
 
-assets/style.css permban dizajnin e faqes.
+4. Kam rregulluar menune e navigimit dhe kam bere qe perdoruesi te mund te levize me lehte neper faqet e website
 
-login.php dhe loginLogic.php përdoren për hyrjen në sistem.
+5. Kam ndryshuar menyren e paraqitjes se filmave duke i vendosur ne karta me poster titull pershkrim vleresim dhe buton per te hapur detajet e filmit
 
-index.php dhe register.php perdoren per regjistrimin e perdoruesve.
+6. Kam shtuar mundesine per te kerkuar filma sipas titullit ose pershkrimit ne Home Page
 
-home.php paraqet filmat dhe mundeson kërkimin e tyre.
+7. Kam permiresuar faqen e detajeve te filmit ku shfaqen informatat kryesore dhe mundesia per te bere rezervim
 
-details.php shfaq te dhenat per nje film.
+8. Kam ndryshuar faqen e kyçjes dhe e kam bere me dizajn me te paster me fusha te rregulluara dhe me pamje te njejte me pjesen tjeter te website
 
-book.php perdoret per rezervimin e biletave.
+9. Kam ndryshuar faqen e regjistrimit dhe kam shtuar fushat per emrin e plote username email fjalekalimin dhe konfirmimin e fjalekalimit
 
-bookings.php shfaq rezervimet.
+10. Kam permiresuar procesin e regjistrimit duke kontrolluar te dhenat e perdoruesit emailin dhe pershtatjen e fjalekalimit me konfirmimin
 
-booking_action.php perdoret per aprovimin ose refuzimin e rezervimeve.
+11. Kam bere ndarjen e roleve ne sistem ku administratori ka mundesi te menaxhoje sistemin ndersa klienti mund te perdore funksionet qe i takojne klientit
 
-dashboard.php paraqet te dhenat kryesore per administratorin.
+12. Kam permiresuar dashboardin e administratorit dhe kam shtuar statistika per perdoruesit filmat rezervimet dhe rezervimet qe jane ne pritje
 
-list_movies.php dhe addMovie.php perdoren per shtimin dhe menaxhimin e filmave.
+13. Kam permiresuar menaxhimin e filmave ku administratori mund te shtoje filma ti ndryshoje informatat dhe ti fshije filmat
 
-database/mms.sql permban strukturen dhe te dhenat fillestare te databazes.
+14. Kam permiresuar faqen e rezervimeve ku administratori mund ti shikoje rezervimet dhe te aprovoje ose refuzoje ato
 
-Gjate kontrollimit të projektit kemi kaluar nëpër faqet kryesore dhe kemi bërë disa rregullime që sistemi të funksionojë më mirë.
+15. Kam bere qe klienti te mund ti shikoje vetem rezervimet e veta dhe te mos kete qasje ne funksionet e administratorit
 
-Është rregulluar lidhja e PHP me databazën duke përdorur PDO.
+16. Kam shtuar kontrollin e qasjes ne faqet e sistemit ne menyre qe faqet e administratorit te jene te mbrojtura nga perdoruesit e paautorizuar
 
-Është kontrolluar procesi i hyrjes dhe është përmirësuar mënyra e ruajtjes së sesionit të përdoruesit.
+17. Kam permiresuar lidhjen me databazen permes PDO dhe kam perdorur query te pergatitura per veprimet kryesore me te dhenat
 
-Janë vendosur kontrolle për faqet ku duhet të jetë i kyçur përdoruesi. Gjithashtu janë ndarë veprimet që mund t'i kryejë klienti nga ato që lejohen vetëm për administratorin.
+18. Kam shtuar kontrolle per sigurine e formularve permes CSRF token dhe kam rregulluar menaxhimin e sesionit te perdoruesit
 
-Është rregulluar dalja nga llogaria.
+19. Kam shtuar nje imazh zevendesues per filmat qe nuk kane poster ne menyre qe faqja te mos shfaqe imazh te prishur
 
-Te regjistrimi kontrollohen fushat e formularit, adresa e emailit dhe nëse fjalëkalimi përputhet me konfirmimin.
+20. Kam rregulluar organizimin e fileve duke shtuar folderin includes per funksionet e perbashketa dhe folderin assets per CSS dhe elementet e dizajnit
 
-Fjalëkalimet ruhen në formë të hash-uar dhe kontrollohen gjatë hyrjes në sistem.
+21. Kam permiresuar tekstet dhe emertimet ne faqe ne gjuhen shqipe qe perdoruesi ta kuptoje me lehte sistemin
 
-Te formularët që ndryshojnë të dhënat janë shtuar kontrolle për kërkesat e dërguara.
+22. Kam permiresuar pamjen e tabelave formularve kartave dhe butonave qe website te jete me i lexueshem dhe me i pershtatshem per ekrane te ndryshme
 
-Gjatë rezervimit kontrollohen filmi i zgjedhur, numri i biletave, data dhe ora.
+23. Kam bere ndryshime ne databazen e projektit per te mbeshtetur funksionet e permiresuara te perdoruesve filmave dhe rezervimeve
 
-Rezervimet e reja ruhen në pritje. Administratori mund t'i kontrollojë dhe pastaj t'i aprovojë ose refuzojë.
-
-Është përmirësuar ngarkimi i posterave të filmave dhe kontrolli i formatit dhe madhësisë së fotografisë.
-
-Është shtuar kërkimi i filmave dhe janë përmirësuar paraqitjet kur nuk gjenden rezultate.
-
-Në panelin e administratorit paraqiten të dhëna për filmat, përdoruesit dhe rezervimet.
-
-Është punuar edhe në pamjen e faqeve, në mënyrë që formularët dhe tabelat të jenë më të qarta dhe faqja të përshtatet me ekrane të madhësive të ndryshme.
-
-Në rastet kur mungon posteri i një filmi, faqja vazhdon të hapet dhe nuk ndërpritet për shkak të fotografisë.
-
-4. Databaza
-
-Databaza e projektit quhet mms dhe përmban tri tabela kryesore.
-
-Tabela users ruan të dhënat e përdoruesve dhe rolet e tyre.
-
-Tabela movies ruan emrin e filmit, përshkrimin, cilësinë, vlerësimin dhe posterin.
-
-Tabela bookings ruan rezervimet dhe të dhënat për përdoruesin, filmin, numrin e biletave, datën, orën dhe statusin e rezervimit.
-
-5. Hapja e projektit në XAMPP
-
-Për ta hapur projektin në kompjuter, folderi Movies_Managment_System vendoset në C:\xampp\htdocs.
-
-Pastaj hapet XAMPP dhe aktivizohen Apache dhe MySQL.
-
-Në shfletues hapet phpMyAdmin dhe kontrollohet databaza mms. Nëse databaza ka të dhëna ekzistuese, para importimit duhet të ruhet një kopje rezervë.
-
-Në skedarin config.php kontrollohen të dhënat për lidhjen me databazën.
-
-Pasi të jenë aktivizuar shërbimet, projekti hapet përmes localhost.
-
-6. Kontrollimi i funksioneve
-
-Për të kontrolluar nëse projekti punon si duhet, duhet të provohet hyrja me një llogari ekzistuese dhe regjistrimi i një përdoruesi të ri.
-
-Me llogarinë e klientit kontrollohen lista e filmave, detajet e tyre dhe rezervimi i biletave.
-
-Me llogarinë e administratorit kontrollohen paneli, menaxhimi i filmave dhe lista e rezervimeve.
-
-Duhet të provohet edhe aprovimi dhe refuzimi i rezervimeve, si dhe ngarkimi i posterave në format JPG ose PNG.
-
-Në fund kontrollohet edhe pamja e projektit në një dritare më të vogël.
-
-7. Përfundim
-
-Gjatë punës në Movies Management System kemi organizuar pjesët kryesore të projektit dhe kemi përmirësuar funksionet për hyrje, regjistrim, menaxhim të filmave dhe rezervim të biletave.
-
-Sistemi u mundëson klientëve të shikojnë filmat dhe të bëjnë rezervime, ndërsa administratori mund të menaxhojë filmat dhe të kontrollojë rezervimet.
-
-Para dorëzimit, funksionet duhet të provohen në kompjuterin ku do të prezantohet projekti.
+Ne perfundim projekti final ka nje pamje me moderne dhe funksione me te organizuara krahasuar me versionin origjinal
