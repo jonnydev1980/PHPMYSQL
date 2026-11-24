@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/app.php';
 require_role('customer');
-$title = 'My Dashboard';
+$title = 'Paneli im';
 
 $result = stmt($conn, 'SELECT COUNT(*) AS total FROM vehicles WHERE user_id = ?', 'i', [$_SESSION['user_id']])->get_result();
 $vehicleCount = (int) $result->fetch_assoc()['total'];
@@ -22,33 +22,33 @@ $rows = stmt($conn, "
 include __DIR__ . '/../includes/customer_header.php';
 ?>
 <div class="welcome">
-    <h2>Welcome, <?= e($_SESSION['full_name'] ?? 'Customer') ?></h2>
-    <p>Keep track of your vehicles and service appointments in one place.</p>
+    <h2>Mirë se vini, <?= e($_SESSION['full_name'] ?? 'Klienti') ?></h2>
+    <p>Menaxhoni automjetet dhe terminet tuaja në një vend.</p>
 </div>
 
 <div class="stats">
-    <div class="stat-card"><div class="stat-top"><span>My vehicles</span><span class="stat-icon">▣</span></div><h2><?= e($vehicleCount) ?></h2><small>Registered vehicles</small></div>
-    <div class="stat-card"><div class="stat-top"><span>Appointments</span><span class="stat-icon">▦</span></div><h2><?= e($appointmentCount) ?></h2><small>All service requests</small></div>
+    <div class="stat-card"><div class="stat-top"><span>Automjetet e mia</span><span class="stat-icon">▣</span></div><h2><?= e($vehicleCount) ?></h2><small>Automjete të regjistruara</small></div>
+    <div class="stat-card"><div class="stat-top"><span>Terminet</span><span class="stat-icon">▦</span></div><h2><?= e($appointmentCount) ?></h2><small>Të gjitha kërkesat për servis</small></div>
 </div>
 
-<div class="section-head"><h2>Recent appointments</h2><a class="btn" href="book.php">Book a service</a></div>
+<div class="section-head"><h2>Terminet e fundit</h2><a class="btn" href="book.php">Rezervo servis</a></div>
 <div class="table-wrap">
     <table class="data-table">
-        <thead><tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th></tr></thead>
+        <thead><tr><th>Automjeti</th><th>Shërbimi</th><th>Data</th><th>Statusi</th></tr></thead>
         <tbody>
         <?php if (!$rows->num_rows): ?>
-            <tr><td colspan="4" class="empty">You have no appointments yet. Book your first service when you are ready.</td></tr>
+            <tr><td colspan="4" class="empty">Nuk keni ende termine. Mund të dërgoni kërkesën tuaj për servis.</td></tr>
         <?php else: while ($row = $rows->fetch_assoc()): ?>
             <tr>
                 <td><b><?= e($row['brand'] . ' ' . $row['model']) ?></b><br><span class="muted"><?= e($row['plate_number']) ?></span></td>
                 <td><?= e($row['service_name']) ?></td>
                 <td><?= e(date('d M Y, H:i', strtotime($row['appointment_date'] . ' ' . $row['appointment_time']))) ?></td>
-                <td><span class="badge <?= e($row['status']) ?>"><?= e(ucwords(str_replace('_', ' ', $row['status']))) ?></span></td>
+                <td><span class="badge <?= e($row['status']) ?>"><?= e(['pending'=>'Në pritje','confirmed'=>'Konfirmuar','in_progress'=>'Në proces','completed'=>'Përfunduar','cancelled'=>'Anuluar'][$row['status']] ?? $row['status']) ?></span></td>
             </tr>
         <?php endwhile; endif; ?>
         </tbody>
     </table>
 </div>
 
-<div class="section-head"><h2>My vehicles</h2><a class="btn btn-light" href="vehicles.php">Manage vehicles</a></div>
+<div class="section-head"><h2>Automjetet e mia</h2><a class="btn btn-light" href="vehicles.php">Menaxho automjetet</a></div>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

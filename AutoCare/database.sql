@@ -71,3 +71,21 @@ CREATE TABLE IF NOT EXISTS appointments (
 
 -- Create the first administrator with setup_admin.php.
 -- Delete setup_admin.php from the server after creating the administrator.
+
+
+-- Sherbimet fillestare. Mund te ndryshohen nga paneli i administratorit.
+INSERT INTO services (service_name, description, price, duration)
+SELECT 'Diagnostikim kompjuterik', 'Kontroll i sistemeve elektronike dhe identifikim i defekteve.', 20.00, 30
+WHERE NOT EXISTS (SELECT 1 FROM services WHERE service_name = 'Diagnostikim kompjuterik');
+
+INSERT INTO services (service_name, description, price, duration)
+SELECT 'Servisim periodik', 'Ndërrim i vajit dhe filtrave, si dhe kontroll bazë i automjetit.', 35.00, 60
+WHERE NOT EXISTS (SELECT 1 FROM services WHERE service_name = 'Servisim periodik');
+
+INSERT INTO services (service_name, description, price, duration)
+SELECT 'Kontroll i sistemit të frenimit', 'Kontroll i frenave, disqeve dhe elementeve përkatëse.', 25.00, 45
+WHERE NOT EXISTS (SELECT 1 FROM services WHERE service_name = 'Kontroll i sistemit të frenimit');
+
+INSERT INTO services (service_name, description, price, duration)
+SELECT 'Kontroll i motorit', 'Kontroll i përgjithshëm i gjendjes dhe funksionimit të motorit.', 30.00, 45
+WHERE NOT EXISTS (SELECT 1 FROM services WHERE service_name = 'Kontroll i motorit');

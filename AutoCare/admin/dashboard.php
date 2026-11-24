@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/../config/app.php';
 require_role('admin');
-$title = 'Dashboard';
+$title = 'Paneli kryesor';
 
 $counts = [];
 $queries = [
-    'Customers' => "SELECT COUNT(*) AS total FROM users WHERE role = 'customer'",
-    'Vehicles' => "SELECT COUNT(*) AS total FROM vehicles",
-    'Services' => "SELECT COUNT(*) AS total FROM services",
-    'Appointments' => "SELECT COUNT(*) AS total FROM appointments"
+    'Klientët' => "SELECT COUNT(*) AS total FROM users WHERE role = 'customer'",
+    'Automjetet' => "SELECT COUNT(*) AS total FROM vehicles",
+    'Shërbimet' => "SELECT COUNT(*) AS total FROM services",
+    'Terminet' => "SELECT COUNT(*) AS total FROM appointments"
 ];
 
 foreach ($queries as $label => $sql) {
@@ -30,8 +30,8 @@ $recent = $conn->query("
 include __DIR__ . '/../includes/admin_header.php';
 ?>
 <div class="welcome">
-    <h2>Welcome back, <?= e($_SESSION['full_name'] ?? 'Administrator') ?></h2>
-    <p>Here is an overview of your workshop and its latest service requests.</p>
+    <h2>Mirë se u kthyet, <?= e($_SESSION['full_name'] ?? 'Administrator') ?></h2>
+    <p>Këtu mund të shihni përmbledhjen e servisit dhe kërkesat e fundit.</p>
 </div>
 
 <div class="stats">
@@ -46,7 +46,7 @@ include __DIR__ . '/../includes/admin_header.php';
                 <span class="stat-icon"><?= e($icons[$index++]) ?></span>
             </div>
             <h2><?= e($number) ?></h2>
-            <small>Registered records</small>
+            <small>Të dhëna të regjistruara</small>
         </div>
     <?php endforeach; ?>
 </div>
@@ -54,17 +54,17 @@ include __DIR__ . '/../includes/admin_header.php';
 <div class="quick-grid">
     <div class="panel">
         <div class="panel-head">
-            <h3>Recent appointments</h3>
-            <a class="btn btn-light btn-sm" href="appointments.php">View all</a>
+            <h3>Terminet e fundit</h3>
+            <a class="btn btn-light btn-sm" href="appointments.php">Shiko të gjitha</a>
         </div>
         <div class="table-wrap" style="border:0;box-shadow:none">
             <table class="data-table">
                 <thead>
-                    <tr><th>Customer</th><th>Vehicle plate</th><th>Service</th><th>Date</th><th>Status</th></tr>
+                    <tr><th>Klienti</th><th>Targa</th><th>Shërbimi</th><th>Data</th><th>Statusi</th></tr>
                 </thead>
                 <tbody>
                 <?php if (!$recent->num_rows): ?>
-                    <tr><td colspan="5" class="empty">No appointments have been received yet.</td></tr>
+                    <tr><td colspan="5" class="empty">Ende nuk ka kërkesa për termine.</td></tr>
                 <?php else: ?>
                     <?php while ($row = $recent->fetch_assoc()): ?>
                         <tr>
@@ -72,7 +72,7 @@ include __DIR__ . '/../includes/admin_header.php';
                             <td><?= e($row['plate_number']) ?></td>
                             <td><?= e($row['service_name']) ?></td>
                             <td><?= e(date('d M Y, H:i', strtotime($row['appointment_date'] . ' ' . $row['appointment_time']))) ?></td>
-                            <td><span class="badge <?= e($row['status']) ?>"><?= e(ucwords(str_replace('_', ' ', $row['status']))) ?></span></td>
+                            <td><span class="badge <?= e($row['status']) ?>"><?= e(['pending'=>'Në pritje','confirmed'=>'Konfirmuar','in_progress'=>'Në proces','completed'=>'Përfunduar','cancelled'=>'Anuluar'][$row['status']] ?? $row['status']) ?></span></td>
                         </tr>
                     <?php endwhile; ?>
                 <?php endif; ?>
@@ -82,13 +82,13 @@ include __DIR__ . '/../includes/admin_header.php';
     </div>
 
     <div class="panel">
-        <div class="panel-head"><h3>Quick actions</h3></div>
+        <div class="panel-head"><h3>Veprime të shpejta</h3></div>
         <div class="link-list">
-            <a href="customers.php">Manage customers <b>→</b></a>
-            <a href="vehicles.php">Manage vehicles <b>→</b></a>
-            <a href="services.php">Manage services <b>→</b></a>
-            <a href="appointments.php">Review appointments <b>→</b></a>
-            <a href="mechanics.php">Manage mechanics <b>→</b></a>
+            <a href="customers.php">Menaxho klientët <b>→</b></a>
+            <a href="vehicles.php">Menaxho automjetet <b>→</b></a>
+            <a href="services.php">Menaxho shërbimet <b>→</b></a>
+            <a href="appointments.php">Shiko terminet <b>→</b></a>
+            <a href="mechanics.php">Menaxho mekanikët <b>→</b></a>
         </div>
     </div>
 </div>

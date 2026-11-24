@@ -3,19 +3,19 @@
 require_once '../config/app.php';
 require_role('admin');
 
-$title = 'Mechanics';
+$title = 'Mekanikët';
 
-/* Delete mechanic */
+/* Fshi mechanic */
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
     stmt($conn, 'DELETE FROM mechanics WHERE id = ?', 'i', [$id]);
 
-    flash('Mechanic deleted successfully.');
+    flash('Mekaniku u fshi me sukses.');
     redirect('mechanics.php');
 }
 
-/* Load mechanic for editing */
+/* Merr mekanikun për ndryshim */
 $edit = null;
 
 if (isset($_GET['edit'])) {
@@ -31,12 +31,12 @@ if (isset($_GET['edit'])) {
     $edit = $result->get_result()->fetch_assoc();
 
     if (!$edit) {
-        flash('Mechanic not found.');
+        flash('Mekaniku nuk u gjet.');
         redirect('mechanics.php');
     }
 }
 
-/* Save mechanic */
+/* Ruaj mekanikun */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = (int) ($_POST['id'] ?? 0);
@@ -45,21 +45,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $specialization = trim($_POST['specialization'] ?? '');
-    $status = $_POST['status'] ?? 'available';
+    $status = $_POST['status'] ?? 'active';
 
-    $allowedStatuses = ['available', 'busy'];
+    $allowedStatuses = ['active', 'inactive'];
 
     if ($name === '') {
-        flash('Please enter the mechanic name.');
+        flash('Ju lutemi shkruani emrin e mekanikut.');
         redirect('mechanics.php');
     }
 
     if (!in_array($status, $allowedStatuses, true)) {
-        $status = 'available';
+        $status = 'active';
     }
 
     if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        flash('Please enter a valid email address.');
+        flash('Ju lutemi shkruani një adresë të vlefshme emaili.');
         redirect('mechanics.php');
     }
 
@@ -71,33 +71,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              SET full_name = ?,
                  phone = ?,
                  email = ?,
-                 specialization = ?,
+                 specialty = ?,
                  status = ?
              WHERE id = ?',
             'sssssi',
             [$name, $phone, $email, $specialization, $status, $id]
         );
 
-        flash('Mechanic updated successfully.');
+        flash('Të dhënat e mekanikut u përditësuan.');
 
     } else {
 
         stmt(
             $conn,
             'INSERT INTO mechanics
-             (full_name, phone, email, specialization, status)
+             (full_name, phone, email, specialty, status)
              VALUES (?, ?, ?, ?, ?)',
             'sssss',
             [$name, $phone, $email, $specialization, $status]
         );
 
-        flash('Mechanic added successfully.');
+        flash('Mekaniku u shtua me sukses.');
     }
 
     redirect('mechanics.php');
 }
 
-/* Get workshop team */
+/* Merr ekipin e servisit */
 $rows = $conn->query(
     "SELECT
         m.*,
@@ -116,12 +116,12 @@ include '../includes/admin_header.php';
 
     <div class="panel-head">
         <h3>
-            <?= $edit ? 'Edit mechanic' : 'Add mechanic' ?>
+            <?= $edit ? 'Ndrysho mekanikun' : 'Shto mekanik' ?>
         </h3>
 
         <?php if ($edit): ?>
             <a href="mechanics.php" class="btn btn-light btn-sm">
-                Cancel
+                Anulo
             </a>
         <?php endif; ?>
     </div>
@@ -137,18 +137,18 @@ include '../includes/admin_header.php';
         <div class="form-grid">
 
             <div class="field">
-                <label>Full name</label>
+                <label>Emri dhe mbiemri</label>
                 <input
                     type="text"
                     name="full_name"
                     required
                     value="<?= e($edit['full_name'] ?? '') ?>"
-                    placeholder="Enter full name"
+                    placeholder="Shkruani emrin e plotë"
                 >
             </div>
 
             <div class="field">
-                <label>Phone</label>
+                <label>Telefoni</label>
                 <input
                     type="text"
                     name="phone"
@@ -158,7 +158,7 @@ include '../includes/admin_header.php';
             </div>
 
             <div class="field">
-                <label>Email</label>
+                <label>Emaili</label>
                 <input
                     type="email"
                     name="email"
@@ -168,32 +168,32 @@ include '../includes/admin_header.php';
             </div>
 
             <div class="field">
-                <label>Specialization</label>
+                <label>Specializimi</label>
                 <input
                     type="text"
                     name="specialization"
-                    value="<?= e($edit['specialization'] ?? '') ?>"
-                    placeholder="Oil Change, Diagnostics..."
+                    value="<?= e($edit['specialty'] ?? '') ?>"
+                    placeholder="p.sh. Diagnostikim, motor, frena..."
                 >
             </div>
 
             <div class="field">
-                <label>Status</label>
+                <label>Statusi</label>
 
                 <select name="status">
 
                     <option
-                        value="available"
-                        <?= ($edit['status'] ?? 'available') === 'available' ? 'selected' : '' ?>
+                        value="active"
+                        <?= ($edit['status'] ?? 'active') === 'active' ? 'selected' : '' ?>
                     >
-                        Available
+                        Aktiv
                     </option>
 
                     <option
-                        value="busy"
-                        <?= ($edit['status'] ?? '') === 'busy' ? 'selected' : '' ?>
+                        value="inactive"
+                        <?= ($edit['status'] ?? '') === 'inactive' ? 'selected' : '' ?>
                     >
-                        Busy
+                        Joaktiv
                     </option>
 
                 </select>
@@ -203,7 +203,7 @@ include '../includes/admin_header.php';
 
         <div class="form-actions">
             <button type="submit" class="btn">
-                <?= $edit ? 'Update mechanic' : 'Save mechanic' ?>
+                <?= $edit ? 'Përditëso mekanikun' : 'Ruaj mekanikun' ?>
             </button>
         </div>
 
@@ -211,16 +211,16 @@ include '../includes/admin_header.php';
 </div>
 
 
-<!-- Workshop team -->
+<!-- Ekipi i servisit -->
 
 <div class="toolbar">
 
-    <h3>Workshop team</h3>
+    <h3>Ekipi i servisit</h3>
 
     <input
         class="search"
         type="text"
-        placeholder="Search mechanics..."
+        placeholder="Kërko mekanikë..."
         data-search="#mechanics"
     >
 
@@ -233,13 +233,13 @@ include '../includes/admin_header.php';
 
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Specialization</th>
-                <th>Jobs</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Emri</th>
+                <th>Telefoni</th>
+                <th>Emaili</th>
+                <th>Specializimi</th>
+                <th>Punët</th>
+                <th>Statusi</th>
+                <th>Veprimet</th>
             </tr>
         </thead>
 
@@ -249,7 +249,7 @@ include '../includes/admin_header.php';
 
             <tr>
                 <td colspan="7" class="empty">
-                    No mechanics added.
+                    Nuk është shtuar asnjë mekanik.
                 </td>
             </tr>
 
@@ -267,13 +267,13 @@ include '../includes/admin_header.php';
 
                     <td><?= e($r['email'] ?? '') ?></td>
 
-                    <td><?= e($r['specialization'] ?? '') ?></td>
+                    <td><?= e($r['specialty'] ?? '') ?></td>
 
                     <td><?= e($r['jobs']) ?></td>
 
                     <td>
                         <span class="badge <?= e($r['status']) ?>">
-                            <?= e(ucfirst($r['status'])) ?>
+                            <?= e($r['status'] === 'active' ? 'Aktiv' : 'Joaktiv') ?>
                         </span>
                     </td>
 
@@ -283,15 +283,15 @@ include '../includes/admin_header.php';
                             class="btn btn-light btn-sm"
                             href="?edit=<?= (int) $r['id'] ?>"
                         >
-                            Edit
+                            Ndrysho
                         </a>
 
                         <a
                             class="btn btn-danger btn-sm"
-                            data-confirm="Are you sure you want to delete this mechanic?"
+                            data-confirm="A dëshironi ta fshini këtë mekanik?"
                             href="?delete=<?= (int) $r['id'] ?>"
                         >
-                            Delete
+                            Fshi
                         </a>
 
                     </td>

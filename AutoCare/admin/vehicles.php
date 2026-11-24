@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/app.php';
 require_role('admin');
-$title = 'Vehicles';
+$title = 'Automjetet';
 $error = '';
 $edit = null;
 
@@ -9,7 +9,7 @@ if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
     if ($id > 0) {
         stmt($conn, 'DELETE FROM vehicles WHERE id = ?', 'i', [$id]);
-        flash('Vehicle deleted.');
+        flash('Automjeti u fshi.');
     }
     redirect('vehicles.php');
 }
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $plate = strtoupper(trim($_POST['plate_number'] ?? ''));
 
     if (!$userId || $brand === '' || $model === '' || $plate === '') {
-        $error = 'Complete all required vehicle details.';
+        $error = 'Plotësoni të gjitha të dhënat e kërkuara të automjetit.';
     } else {
         try {
             if ($id > 0) {
@@ -35,10 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 stmt($conn, 'INSERT INTO vehicles (user_id, brand, model, year, plate_number) VALUES (?, ?, ?, NULLIF(?, 0), ?)', 'issis', [$userId, $brand, $model, $year, $plate]);
             }
-            flash('Vehicle saved successfully.');
+            flash('Automjeti u ruajt me sukses.');
             redirect('vehicles.php');
         } catch (mysqli_sql_exception $e) {
-            $error = $e->getCode() === 1062 ? 'This plate number is already registered.' : 'The vehicle could not be saved.';
+            $error = $e->getCode() === 1062 ? 'Kjo targë është e regjistruar tashmë.' : 'Automjeti nuk mund të ruhej.';
         }
     }
 }
@@ -49,37 +49,37 @@ include __DIR__ . '/../includes/admin_header.php';
 ?>
 <div class="form-card" style="margin-bottom:20px">
     <div class="panel-head">
-        <h3><?= $edit ? 'Edit vehicle' : 'Register a vehicle' ?></h3>
-        <?php if ($edit): ?><a class="btn btn-light btn-sm" href="vehicles.php">Cancel</a><?php endif; ?>
+        <h3><?= $edit ? 'Ndrysho automjetin' : 'Regjistro automjet' ?></h3>
+        <?php if ($edit): ?><a class="btn btn-light btn-sm" href="vehicles.php">Anulo</a><?php endif; ?>
     </div>
     <?php if ($error): ?><div class="alert error"><?= e($error) ?></div><?php endif; ?>
     <form method="post">
         <input type="hidden" name="id" value="<?= e($edit['id'] ?? '') ?>">
         <div class="form-grid">
-            <div class="field full"><label>Owner</label><select name="user_id" required><option value="">Select customer</option><?php while ($user = $users->fetch_assoc()): ?><option value="<?= (int) $user['id'] ?>" <?= (($edit['user_id'] ?? '') == $user['id']) ? 'selected' : '' ?>><?= e($user['full_name']) ?></option><?php endwhile; ?></select></div>
-            <div class="field"><label>Brand</label><input name="brand" required value="<?= e($edit['brand'] ?? '') ?>" placeholder="e.g. Volkswagen"></div>
-            <div class="field"><label>Model</label><input name="model" required value="<?= e($edit['model'] ?? '') ?>" placeholder="e.g. Golf 7"></div>
-            <div class="field"><label>Year</label><input type="number" name="year" min="1950" max="2099" value="<?= e($edit['year'] ?? '') ?>"></div>
-            <div class="field"><label>Plate number</label><input name="plate_number" required value="<?= e($edit['plate_number'] ?? '') ?>" placeholder="01-123-AB"></div>
+            <div class="field full"><label>Pronari</label><select name="user_id" required><option value="">Zgjidh klientin</option><?php while ($user = $users->fetch_assoc()): ?><option value="<?= (int) $user['id'] ?>" <?= (($edit['user_id'] ?? '') == $user['id']) ? 'selected' : '' ?>><?= e($user['full_name']) ?></option><?php endwhile; ?></select></div>
+            <div class="field"><label>Marka</label><input name="brand" required value="<?= e($edit['brand'] ?? '') ?>" placeholder="p.sh. Volkswagen"></div>
+            <div class="field"><label>Modeli</label><input name="model" required value="<?= e($edit['model'] ?? '') ?>" placeholder="p.sh. Golf 7"></div>
+            <div class="field"><label>Viti</label><input type="number" name="year" min="1950" max="2099" value="<?= e($edit['year'] ?? '') ?>"></div>
+            <div class="field"><label>Targa</label><input name="plate_number" required value="<?= e($edit['plate_number'] ?? '') ?>" placeholder="01-123-AB"></div>
         </div>
-        <div class="form-actions"><button class="btn">Save vehicle</button></div>
+        <div class="form-actions"><button class="btn">Ruaj automjetin</button></div>
     </form>
 </div>
 
-<div class="toolbar"><h3>Registered vehicles</h3><input class="search" placeholder="Search vehicles..." data-search="#vehicles"></div>
+<div class="toolbar"><h3>Automjete të regjistruara</h3><input class="search" placeholder="Kërko automjete..." data-search="#vehicles"></div>
 <div class="table-wrap">
     <table class="data-table" id="vehicles">
-        <thead><tr><th>Vehicle</th><th>Owner</th><th>Year</th><th>Plate</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Automjeti</th><th>Pronari</th><th>Viti</th><th>Targa</th><th>Veprimet</th></tr></thead>
         <tbody>
         <?php if (!$rows->num_rows): ?>
-            <tr><td colspan="5" class="empty">No vehicles have been registered.</td></tr>
+            <tr><td colspan="5" class="empty">Ende nuk është regjistruar asnjë automjet.</td></tr>
         <?php else: while ($row = $rows->fetch_assoc()): ?>
             <tr>
                 <td><b><?= e($row['brand'] . ' ' . $row['model']) ?></b></td>
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= e($row['year'] ?: '—') ?></td>
                 <td><?= e($row['plate_number']) ?></td>
-                <td class="actions"><a class="btn btn-light btn-sm" href="?edit=<?= (int) $row['id'] ?>">Edit</a><a class="btn btn-danger btn-sm" data-confirm="Delete this vehicle?" href="?delete=<?= (int) $row['id'] ?>">Delete</a></td>
+                <td class="actions"><a class="btn btn-light btn-sm" href="?edit=<?= (int) $row['id'] ?>">Ndrysho</a><a class="btn btn-danger btn-sm" data-confirm="Të fshihet ky automjet?" href="?delete=<?= (int) $row['id'] ?>">Fshi</a></td>
             </tr>
         <?php endwhile; endif; ?>
         </tbody>

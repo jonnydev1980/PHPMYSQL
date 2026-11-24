@@ -1,1 +1,1 @@
-</section><footer class="footer">© <?= date('Y') ?> AutoCare · Service management system</footer></main></div><script src="../assets/js/app.js"></script></body></html>
+</section><footer class="footer">© <?= date('Y') ?> AutoCare · Sistem për menaxhimin e servisit</footer></main></div><script src="../assets/js/app.js"></script></body></html>

@@ -4,16 +4,17 @@ require_once __DIR__ . '/../config/app.php';
 
 require_role('admin');
 
-$title = 'Appointments';
+$title = 'Terminis';
 
 $allowedStatuses = [
     'pending',
-    'approved',
+    'confirmed',
+    'in_progress',
     'completed',
     'cancelled'
 ];
 
-// Save appointment changes
+// Ruaj ndryshimet e terminit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = (int)($_POST['id'] ?? 0);
@@ -21,13 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mechanicId = (int)($_POST['mechanic_id'] ?? 0);
 
     if ($id <= 0 || !in_array($status, $allowedStatuses, true)) {
-        flash('Invalid appointment information.', 'error');
+        flash('Të dhënat e terminit nuk janë të vlefshme.', 'error');
         redirect('appointments.php');
     }
 
     try {
 
-        // Check that appointment exists
+        // Kontrollo nëse termini ekziston
         $check = stmt(
             $conn,
             "SELECT id FROM appointments WHERE id = ?",
@@ -36,27 +37,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if (!$check->get_result()->fetch_assoc()) {
-            flash('Appointment not found.', 'error');
+            flash('Termini nuk u gjet.', 'error');
             redirect('appointments.php');
         }
 
-        // Check selected mechanic
+        // Kontrollo mekanikun e zgjedhur
         if ($mechanicId > 0) {
 
-            $checkMechanic = stmt(
+            $checkMekaniku = stmt(
                 $conn,
                 "SELECT id FROM mechanics WHERE id = ?",
                 "i",
                 [$mechanicId]
             );
 
-            if (!$checkMechanic->get_result()->fetch_assoc()) {
-                flash('Selected mechanic does not exist.', 'error');
+            if (!$checkMekaniku->get_result()->fetch_assoc()) {
+                flash('Mekaniku i zgjedhur nuk ekziston.', 'error');
                 redirect('appointments.php');
             }
         }
 
-        // Update appointment
+        // Përditëso appointment
         stmt(
             $conn,
             "UPDATE appointments
@@ -67,18 +68,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [$mechanicId, $status, $id]
         );
 
-        flash('Appointment updated successfully.');
+        flash('Termini u përditësua me sukses.');
 
     } catch (Throwable $e) {
 
         error_log($e->getMessage());
-        flash('Unable to update appointment. Please check the database.', 'error');
+        flash('Termini nuk mund të përditësohej. Kontrolloni databazën.', 'error');
     }
 
     redirect('appointments.php');
 }
 
-// Get appointments
+// Merr terminet
 $rows = $conn->query("
     SELECT
         a.id,
@@ -115,7 +116,7 @@ $rows = $conn->query("
         a.appointment_time DESC
 ");
 
-// Get mechanics
+// Merr mekanikët
 $mechanics = $conn->query("
     SELECT id, full_name
     FROM mechanics
@@ -129,12 +130,12 @@ include __DIR__ . '/../includes/admin_header.php';
 
 <div class="toolbar">
     <p class="muted">
-        Review customer requests, assign a mechanic and update the work status.
+        Shikoni kërkesat e klientëve, caktoni mekanikët dhe përditësoni statusin e punës.
     </p>
 
     <input
         class="search"
-        placeholder="Search appointments..."
+        placeholder="Kërko termine..."
         data-search="#appointments"
     >
 </div>
@@ -145,12 +146,12 @@ include __DIR__ . '/../includes/admin_header.php';
 
         <thead>
             <tr>
-                <th>Customer / Vehicle</th>
-                <th>Service</th>
-                <th>Appointment</th>
-                <th>Mechanic</th>
-                <th>Status</th>
-                <th>Update</th>
+                <th>Klienti / Automjeti</th>
+                <th>Shërbimi</th>
+                <th>Termini</th>
+                <th>Mekaniku</th>
+                <th>Statusi</th>
+                <th>Përditëso</th>
             </tr>
         </thead>
 
@@ -160,7 +161,7 @@ include __DIR__ . '/../includes/admin_header.php';
 
             <tr>
                 <td colspan="6" class="empty">
-                    No appointments have been received yet.
+                    Ende nuk ka kërkesa për termine.
                 </td>
             </tr>
 
@@ -197,14 +198,12 @@ include __DIR__ . '/../includes/admin_header.php';
                     </td>
 
                     <td>
-                        <?= e($row['mechanic_name'] ?: 'Not assigned') ?>
+                        <?= e($row['mechanic_name'] ?: 'Pa caktuar') ?>
                     </td>
 
                     <td>
                         <span class="badge <?= e($row['status']) ?>">
-                            <?= e(ucwords(
-                                str_replace('_', ' ', $row['status'])
-                            )) ?>
+                            <?= e(['pending'=>'Në pritje','confirmed'=>'Konfirmuar','in_progress'=>'Në proces','completed'=>'Përfunduar','cancelled'=>'Anuluar'][$row['status']] ?? $row['status']) ?>
                         </span>
                     </td>
 
@@ -224,7 +223,7 @@ include __DIR__ . '/../includes/admin_header.php';
                                 required
                             >
 
-                                <option value="0">Unassigned</option>
+                                <option value="0">Pa caktuar</option>
 
                                 <?php foreach ($mechanicList as $mechanic): ?>
 
@@ -244,7 +243,7 @@ include __DIR__ . '/../includes/admin_header.php';
 
                             <select
                                 name="status"
-                                aria-label="Appointment status"
+                                aria-label="Termini status"
                                 required
                             >
 
@@ -255,9 +254,7 @@ include __DIR__ . '/../includes/admin_header.php';
                                         <?= $row['status'] === $status
                                             ? 'selected' : '' ?>
                                     >
-                                        <?= e(ucwords(
-                                            str_replace('_', ' ', $status)
-                                        )) ?>
+                                        <?= e(['pending'=>'Në pritje','confirmed'=>'Konfirmuar','in_progress'=>'Në proces','completed'=>'Përfunduar','cancelled'=>'Anuluar'][$status] ?? $status) ?>
                                     </option>
 
                                 <?php endforeach; ?>
